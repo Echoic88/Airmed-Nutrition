@@ -3,11 +3,12 @@ from django.core.validators import ValidationError
 from django.contrib.auth.models import User
 from .models import Brand, FoodBase, FoodItem
 
+
 # Helper function
 def round_6(number):
     """
     Round values in tests below to 6 decimal places to mitigate
-    against float discrepancies in comparisons while still 
+    against float discrepancies in comparisons while still
     at an acceptable decimal resolution
     """
     return round(number, 6)
