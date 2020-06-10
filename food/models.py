@@ -99,3 +99,86 @@ def compare_answers(sender, instance, *args, **kwargs):
 
     if instance.carb_total is not None or instance.carb_total != 0:
         instance.carb_non_sugar = instance.carb_total - instance.carb_sugar
+
+
+class FoodItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=50, blank=False)
+    description = models.TextField(blank=True)
+    food = models.ForeignKey(FoodBase, on_delete=models.CASCADE)
+    weight = models.DecimalField(max_digits=5, decimal_places=2)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def energy(self):
+        """
+        Energy in the FoodBase is stored by 100 grams.
+        Calculate energy per item by dividing FoodBase weight
+        and multiplying by the weight of the item.
+        """
+        return self.food.energy * self.weight / 100
+
+    @property
+    def fat_total(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.fat_total * self.weight / 100
+
+    @property
+    def fat_saturated(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.fat_saturated * self.weight / 100
+
+    @property
+    def fat_unsaturated(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.fat_unsaturated * self.weight / 100
+
+    @property
+    def carb_total(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.carb_total * self.weight / 100
+
+    @property
+    def carb_sugar(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.carb_sugar * self.weight / 100
+
+    @property
+    def carb_non_sugar(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.carb_non_sugar * self.weight / 100
+
+    @property
+    def fibre(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.fibre * self.weight / 100
+
+    @property
+    def protein(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.protein * self.weight / 100
+
+    @property
+    def salt_amount(self):
+        """
+        As with energy property defined above
+        """
+        return self.food.salt_amount * self.weight / 100

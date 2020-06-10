@@ -1,7 +1,16 @@
 from django.test import TestCase
 from django.core.validators import ValidationError
 from django.contrib.auth.models import User
-from .models import Brand, FoodBase
+from .models import Brand, FoodBase, FoodItem
+
+# Helper function
+def round_6(number):
+    """
+    Round values in tests below to 6 decimal places to mitigate
+    against float discrepancies in comparisons while still 
+    at an acceptable decimal resolution
+    """
+    return round(number, 6)
 
 
 # Create your tests here.
@@ -99,9 +108,126 @@ class TestFoodBaseModel(TestCase):
             food.carb_non_sugar, food.carb_total-food.carb_sugar
         )
 
-    def test_raise_validation_error_if_energy_field_is_decimal(self):
-        self.food_data["energy"] = 1.5
-        food = FoodBase(self.food_data)
-        with self.assertRaisesMessage(
-                ValidationError, "Please enter a whole number"):
-            food.clean()
+
+class TestFoodItem(TestCase):
+    """
+    Tests for the FoodItem model
+    """
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="test_user",
+            password="1290Pass"
+        )
+
+        self.brand = Brand.objects.create(name="test_brand")
+
+        self.food_data = {
+            "name": "test_food",
+            "user": self.user,
+            "brand": self.brand,
+            "energy": 50,
+            "fat_total": 3.6,
+            "fat_saturated": 1.1,
+            "carb_total": 2.4,
+            "carb_sugar": 0.6,
+            "fibre": 1.5,
+            "protein": 1.5,
+            "salt_amount": 1.5,
+        }
+        self.food = FoodBase.objects.create(**self.food_data)
+
+        self.food_item_data = {
+            "name": "test_item",
+            "description": "test_description",
+            "food": self.food,
+            "weight": 37.5,
+        }
+
+    def test_saves_with_expected_valid_data(self):
+        test_item = FoodItem.objects.create(**self.food_item_data)
+        retrieve = FoodItem.objects.get(name="test_item")
+
+        self.assertIsInstance(retrieve, FoodItem)
+        self.assertEqual(retrieve.name, test_item.name)
+        self.assertEqual(retrieve.description, test_item.description)
+        self.assertEqual(retrieve.food.name, test_item.food.name)
+        self.assertIsInstance(retrieve.food, FoodBase)
+        self.assertEqual(retrieve.weight, test_item.weight)
+
+    def test_calculate_nutrients_per_item(self):
+        test_item = FoodItem.objects.create(**self.food_item_data)
+
+        self.assertEqual(
+            test_item.energy,
+            round_6(
+                self.food_data["energy"] / 100 * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.fat_total,
+            round_6(
+                self.food_data["fat_total"]
+                / 100
+                * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.fat_saturated,
+            round_6(
+                self.food_data["fat_saturated"]
+                / 100
+                * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.fat_unsaturated,
+            round_6(
+                (self.food_data["fat_total"] - self.food_data["fat_saturated"])
+                / 100
+                * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.carb_total,
+            round_6(
+                self.food_data["carb_total"]
+                / 100
+                * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.carb_sugar,
+            round_6(
+                self.food_data["carb_sugar"]
+                / 100
+                * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.carb_non_sugar,
+            round_6(
+                (self.food_data["carb_total"] - self.food_data["carb_sugar"])
+                / 100
+                * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.fibre,
+            round_6(
+                self.food_data["fibre"] / 100 * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.protein,
+            round_6(
+                self.food_data["protein"] / 100 * self.food_item_data["weight"]
+            )
+        )
+        self.assertEqual(
+            test_item.salt_amount,
+            round_6(
+                self.food_data["salt_amount"]
+                / 100
+                * self.food_item_data["weight"]
+            )
+        )
