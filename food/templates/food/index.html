@@ -7,27 +7,32 @@
     </div>
 </div>
 <div class="row">
-    <div class="col">
-        <h2>Add Brand</h2>
-        
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
-
-        {% crispy brand_form %}
+    <div class="col-6">
+        <div class="row">
+            <div class="col">
+                <h2>Add Brand</h2>
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+                {% crispy brand_form %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>Add Food Item</h2>
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+                {% crispy food_item_form %}
+            </div>
+        </div>
     </div>
-</div>
-{% comment %}
-<div class="row">
-    <div class="col">
+    <div class="col-6">
         <h2>Add Food</h2>
-
         {% for message in messages %}
             <p>{{ message }}</p>
         {% endfor %}
-
         {% crispy food_base_form %}
     </div>
 </div>
-{% endcomment %}
 {% endblock %}

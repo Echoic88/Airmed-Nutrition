@@ -33,6 +33,15 @@ class FoodBaseForm(forms.ModelForm):
             "carb_total", "carb_sugar", "fibre", "protein", "salt_amount",
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = "id-FoodBaseForm"
+        self.helper.form_class = "blueForms"
+        self.helper.form_method = "post"
+        self.helper.form_action = "food:add_food"
+        self.helper.add_input(Submit("submit", "Submit"))
+
 
 class FoodItemForm(forms.ModelForm):
     """
