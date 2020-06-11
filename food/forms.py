@@ -21,3 +21,14 @@ class FoodBaseForm(forms.ModelForm):
             "name", "brand", "energy", "fat_total", "fat_saturated",
             "carb_total", "carb_sugar", "fibre", "protein", "salt_amount",
         ]
+
+
+class FoodItemForm(forms.ModelForm):
+    """
+    Form to enter details for individual food item
+    """
+    class Meta:
+        model = FoodItem
+        fields = [
+            "name", "description", "food", "weight",
+        ]

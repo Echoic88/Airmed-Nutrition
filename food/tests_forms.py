@@ -1,7 +1,8 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
-from .models import Brand, FoodBase
-from .forms import BrandForm, FoodBaseForm
+from django.contrib.auth.models import User
+from .models import Brand, FoodBase, FoodItem
+from .forms import BrandForm, FoodBaseForm, FoodItemForm
 
 
 class TestBrandForm(TestCase):
@@ -56,3 +57,48 @@ class TestFoodBaseForm(TestCase):
 
         self.assertRaises(ValidationError)
         self.assertFalse(form.is_valid())
+
+
+class TestFoodItemForm(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(
+            username="test_user",
+            password="1290Pass"
+        )
+
+        self.brand = Brand.objects.create(
+            name="test_brand"
+        )
+
+        self.food_base = FoodBase.objects.create(**{
+            "name": "test_food",
+            "brand": self.brand,
+            "energy": 50,
+            "fat_total": 3.6,
+            "fat_saturated": 1.1,
+            "carb_total": 2.4,
+            "carb_sugar": 0.6,
+            "fibre": 1.5,
+            "protein": 1.5,
+            "salt_amount": 1.5,
+        })
+
+        self.food_item_data = {
+            "name": "test_item",
+            "description": "Test_description",
+            "food": self.food_base,
+            "weight": 37
+        }
+
+    def test_saves_with_expected_valid_data(self):
+        form = FoodItemForm(self.food_item_data)
+        self.assertTrue(form.is_valid())
+
+        form.save()
+        retrieve = FoodItem.objects.get(name="test_item")
+        self.assertIsInstance(retrieve, FoodItem)
+        self.assertEqual(retrieve.name, form["name"].value())
+        self.assertEqual(retrieve.description, form["description"].value())
+        self.assertEqual(retrieve.food.id, form["food"].value())
+        self.assertIsInstance(retrieve.food, FoodBase),
+        self.assertEqual(retrieve.weight, form["weight"].value())
