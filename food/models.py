@@ -1,5 +1,6 @@
 import uuid
 from django.db import models
+from django.utils.translation import gettext as _
 from django.core.validators import ValidationError
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -19,8 +20,8 @@ class Brand(models.Model):
 
     def clean(self):
         if self.name is None or self.name == "":
-            raise ValidationError(
-                "Name is required", code="required_field"
+            raise ValidationError(_(
+                "Name is required"), code="required_field"
             )
 
 
@@ -83,9 +84,13 @@ class FoodBase(models.Model):
         return f'{self.name} : {self.brand.name}'
 
     def clean(self):
+        if self.name == "":
+            raise ValidationError({
+                "name": "Required Field",
+            })
         if type(self.energy) is not int:
-            raise ValidationError(
-                "Please enter a whole number", code="non_integer"
+            raise ValidationError(_(
+                "Please enter a whole number"), code="non_integer"
             )
 
 
