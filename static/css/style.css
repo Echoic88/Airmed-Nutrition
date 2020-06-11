@@ -1,0 +1,4 @@
+/* remove "required" asterisk from crispy fields */
+.asteriskField {
+    display: none;
+}

@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import dj_database_url
-#import env
+# import env
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # third party apps below
+    'crispy_forms',
+    # application apps below
     'accounts',
     'home',
     'food',
@@ -82,7 +85,7 @@ WSGI_APPLICATION = 'airmed.wsgi.application'
 
 if "DATABASE_URL" in os.environ:
     DATABASES = {
-        'default':dj_database_url.parse(os.getenv("DATABASE_URL"))
+        'default': dj_database_url.parse(os.getenv("DATABASE_URL"))
     }
 else:
     DATABASES = {
@@ -143,3 +146,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 465
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+
+
+# Crispy forms settings
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

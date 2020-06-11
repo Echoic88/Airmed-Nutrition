@@ -1,4 +1,6 @@
 from django import forms
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from .models import Brand, FoodBase, FoodItem
 
 
@@ -9,6 +11,15 @@ class BrandForm(forms.ModelForm):
     class Meta:
         model = Brand
         fields = ["name"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = "id-brandForm"
+        self.helper.form_class = "blueForms"
+        self.helper.form_method = "post"
+        self.helper.form_action = "food:add_brand"
+        self.helper.add_input(Submit("submit", "Submit"))
 
 
 class FoodBaseForm(forms.ModelForm):
