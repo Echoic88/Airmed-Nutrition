@@ -36,7 +36,7 @@ class FoodBaseForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_id = "id-FoodBaseForm"
+        self.helper.form_id = "id-foodBaseForm"
         self.helper.form_class = "blueForms"
         self.helper.form_method = "post"
         self.helper.form_action = "food:add_food"
@@ -52,3 +52,12 @@ class FoodItemForm(forms.ModelForm):
         fields = [
             "name", "description", "food", "weight",
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = "id-foodItemForm"
+        self.helper.form_class = "blueForms"
+        self.helper.form_method = "post"
+        self.helper.form_action = "food:add_food_item"
+        self.helper.add_input(Submit("submit", "Submit"))
