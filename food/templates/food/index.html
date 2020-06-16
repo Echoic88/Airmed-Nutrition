@@ -1,4 +1,4 @@
-{% extends  "base.html" %}
+{% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 <div class="row">
@@ -7,32 +7,38 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-6">
+    <div class="col-md-6 d-flex flex-column">
         <div class="row">
-            <div class="col">
-                <h2>Add Brand</h2>
-                {% for message in messages %}
+            <div class="col-12">
+                <div class="form-container">
+                    <h2>Add Brand</h2>
+                    {% for message in messages %}
                     <p>{{ message }}</p>
-                {% endfor %}
-                {% crispy brand_form %}
+                    {% endfor %}
+                    {% crispy brand_form %}
+                </div>
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <h2>Add Food Item</h2>
-                {% for message in messages %}
+            <div class="col-12">
+                <div class="form-container">
+                    <h2>Add Food Item</h2>
+                    {% for message in messages %}
                     <p>{{ message }}</p>
-                {% endfor %}
-                {% crispy food_item_form %}
+                    {% endfor %}
+                    {% crispy food_item_form %}
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-6">
-        <h2>Add Food</h2>
-        {% for message in messages %}
+    <div class="col-md-6">
+        <div class="form-container">
+            <h2>Add Food</h2>
+            {% for message in messages %}
             <p>{{ message }}</p>
-        {% endfor %}
-        {% crispy food_base_form %}
+            {% endfor %}
+            {% crispy food_base_form %}
+        </div>
     </div>
 </div>
 {% endblock %}

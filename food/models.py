@@ -52,21 +52,27 @@ class FoodBase(models.Model):
         null=True
     )
     fat_total = models.DecimalField(
+        "total Fat",
         max_digits=4, decimal_places=2, null=True
     )
     fat_saturated = models.DecimalField(
+        "saturated Fat",
         max_digits=4, decimal_places=2, null=True
     )
     fat_unsaturated = models.DecimalField(
+        "unsaturated Fat",
         max_digits=4, decimal_places=2, null=True
     )
     carb_total = models.DecimalField(
+        "total Carbohydrates",
         max_digits=4, decimal_places=2, null=True
     )
     carb_sugar = models.DecimalField(
+        "carbohydrates (sugars)",
         max_digits=4, decimal_places=2, null=True
     )
     carb_non_sugar = models.DecimalField(
+        "carbohydrates (non-sugars)",
         max_digits=4, decimal_places=2, null=True
     )
     fibre = models.DecimalField(
@@ -76,6 +82,7 @@ class FoodBase(models.Model):
         max_digits=4, decimal_places=2, null=True
     )
     salt_amount = models.DecimalField(
+        "salt",
         max_digits=4, decimal_places=2, null=True
     )
     tags = models.TextField(blank=True)
@@ -95,7 +102,7 @@ class FoodBase(models.Model):
 
 
 @receiver(pre_save, sender=FoodBase)
-def compare_answers(sender, instance, *args, **kwargs):
+def calculated_fields(sender, instance, *args, **kwargs):
     """
     calculate fat_unsaturated and carb_non_sugars
     """
