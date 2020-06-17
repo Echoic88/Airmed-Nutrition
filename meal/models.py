@@ -26,7 +26,8 @@ class Meal(models.Model):
         max_length=2,
         choices=MEAL_CHOICES,
     )
-    date_time = models.DateTimeField()
+    date = models.DateField()
+    time = models.TimeField()
     template = models.BooleanField(default=False)
 
     def __str__(self):

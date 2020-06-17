@@ -1,14 +1,9 @@
-from datetime import datetime
+from datetime import date, time
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from food.models import Brand, FoodBase, FoodItem
 from .models import Meal, MealItem
-
-
-# helper function to return time as string without microseconds
-def time_string(time):
-    return time.strftime("%Y, %m, %d %H:%M:%S")
 
 
 # Create your tests here.
@@ -22,7 +17,8 @@ class TestMealModel(TestCase):
         self.meal_data = {
             "user": self.user,
             "meal_type": "DN",
-            "date_time": datetime(2004, 8, 10, 18, 15, 00),
+            "date": date(2004, 8, 10),
+            "time":  time(18, 15, 3)
         }
 
     def test_saves_with_expected_valid_data(self):
@@ -33,11 +29,12 @@ class TestMealModel(TestCase):
         self.assertEqual(retrieve.user, self.user)
         self.assertIsInstance(retrieve.user, User)
         self.assertEqual(retrieve.meal_type, self.meal_data["meal_type"])
-        self.assertEqual(
-            time_string(retrieve.date_time),
-            time_string(self.meal_data["date_time"])
-        )
+        self.assertEqual(retrieve.date, self.meal_data["date"])
+        self.assertEqual(retrieve.time, self.meal_data["time"])
         self.assertFalse(retrieve.template)
+
+# time_string(self.meal_data["date_time"])
+
 
     def test_raise_validation_error_if_no_user(self):
         self.meal_data.pop("user")
@@ -64,7 +61,8 @@ class TestMealItemModel(TestCase):
         self.meal = Meal.objects.create(**{
             "user": self.user,
             "meal_type": "DN",
-            "date_time": datetime(2004, 8, 10, 18, 15, 00),
+            "date": date(2004, 8, 10),
+            "time": time(18, 15, 3)
         })
 
         self.brand = Brand.objects.create(**{
