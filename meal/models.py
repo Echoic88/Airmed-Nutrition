@@ -31,7 +31,7 @@ class Meal(models.Model):
     template = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.user.username} - {self.meal_type} - {self.date_time}"
+        return f"{self.user.username} - {self.meal_type} - {self.date} - {self.time}"
 
 
 class MealItem(models.Model):
